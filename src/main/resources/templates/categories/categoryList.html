@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+  <div th:replace="fragments/bodyHeaderLogin :: bodyHeaderLogin"/>
+
+  <div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>카테고리</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="category : ${categories}">
+        <td th:text="${category.id}"></td>
+        <td th:text="${category.category}"></td>
+        <td>
+          <a href="#" th:href="@{/categories/{id}/edit (id=${category.id})}" role="button">수정</a>
+        </td>
+        <td>
+          <a href="#" th:href="@{/categories/{id}/delete (id=${category.id})}" role="button">삭제</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="fragments/footer :: footer" />
+
+</div> <!-- /container -->
+
+</body>
+</html>

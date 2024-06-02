@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+
+    <div class="header" th:fragment="bodyHeaderLogin">
+        <ul class="nav nav-pills pull-right">
+            <li><a href="/">Home</a></li>
+        </ul>
+        <a href="/"><h3 class="text-muted">YHistory</h3></a>
+
+        <div th:if = "${member != null}">
+            <div>안녕하세요 [[${member.name}]]님</div>
+            <form action="/logout" method="post">
+                <button type="submit">로그아웃</button>
+            </form>
+        </div>
+    </div>
+</div>
