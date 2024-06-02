@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -16,7 +15,7 @@ public class Member {
     public Member(MemberDTO memberDTO) {
         this.userId = memberDTO.getUserId();
         this.password = memberDTO.getPassword();
-        this.name = memberDTO.getName();
+        this.userName = memberDTO.getName();
         this.email = memberDTO.getEmail();
     }
 
@@ -29,7 +28,7 @@ public class Member {
     private Long id;
     private String userId;
     private String password;
-    private String name;
+    private String userName;
     private String email;
     private String join_date;
 

@@ -21,7 +21,7 @@ public class CategoryRepository {
     }
 
     public List<Category> findByName(String category) {
-        return em.createQuery("select c from Category c where c.category = :category", Category.class)
+        return em.createQuery("select c from Category c where c.categoryName = :category", Category.class)
                 .setParameter("category", category)
                 .getResultList();
     }

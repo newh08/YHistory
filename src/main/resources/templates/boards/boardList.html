@@ -13,7 +13,7 @@
         <select name="category" id="category" class="form-control">
           <option th:each="category : ${categories}"
                   th:value="${category.id}"
-                  th:text="${category.category}"/>
+                  th:text="${category.categoryName}"/>
         </select>
         <label>제목 검색</label>
         <input name="titleSearch" id="search" class="form-control"/>
@@ -30,7 +30,7 @@
       </thead>
       <tbody>
       <tr th:each="board : ${boards}">
-        <td th:text="${board.category.category}"></td>
+        <td th:text="${board.category.categoryName}"></td>
         <td th:text="${board.title}"></td>
         <td>
           <a href="#" th:href="@{/boards/{id}/view (id=${board.id})}" role="button">바로가기</a>

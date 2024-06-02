@@ -20,7 +20,7 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    private String category;
+    private String categoryName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
@@ -30,7 +30,7 @@ public class Category {
 
     public static Category makeCategory(CategoryForm categoryForm) {
         Category category = new Category();
-        category.category = categoryForm.getCategory();
+        category.categoryName = categoryForm.getCategory();
         return category;
     }
 
@@ -39,10 +39,10 @@ public class Category {
     }
 
     public boolean isAll() {
-        return this.category.equals("ALL");
+        return this.categoryName.equals("ALL");
     }
 
     public void updateCategory(String category) {
-        this.category = category;
+        this.categoryName = category;
     }
 }

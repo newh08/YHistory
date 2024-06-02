@@ -30,7 +30,7 @@
         </div>
 
         <div th:if = "${member != null}">
-            <div>안녕하세요 [[${member.name}]]님</div>
+            <div>안녕하세요 [[${member.userName}]]님</div>
             <form action="/logout" method="post">
                 <button type="submit">로그아웃</button>
             </form>

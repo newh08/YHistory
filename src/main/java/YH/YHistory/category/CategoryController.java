@@ -2,7 +2,6 @@ package YH.YHistory.category;
 
 import YH.YHistory.util.LoginSessionUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -56,7 +55,7 @@ public class CategoryController {
         }
         Category category = categoryService.findOne(categoryId);
         CategoryForm categoryForm = new CategoryForm();
-        categoryForm.setCategory(category.getCategory());
+        categoryForm.setCategory(category.getCategoryName());
         model.addAttribute("categoryForm", categoryForm);
         return ("categories/updateCategoryForm");
     }

@@ -27,7 +27,7 @@ public class CategoryService {
     }
 
     private void validateDuplicateCategory(Category category) {
-        List<Category> categories = categoryRepository.findByName(category.getCategory());
+        List<Category> categories = categoryRepository.findByName(category.getCategoryName());
         if (!categories.isEmpty()) {
             throw new IllegalStateException("이미 동일한 카테고리가 있습니다.");
         }
