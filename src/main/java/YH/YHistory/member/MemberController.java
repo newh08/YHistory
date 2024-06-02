@@ -1,9 +1,5 @@
 package YH.YHistory.member;
 
-import YH.YHistory.session.SessionConst;
-import YH.YHistory.util.LoginSessionUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,15 +30,16 @@ public class MemberController {
 
         Member member = new Member(memberDTO);
 
-        memberService.join(member);
+        try {
+            memberService.join(member);
+        } catch (IllegalStateException e) {
+            result.reject("sameUserName", e.getMessage());
+        }
         return "redirect:/";
     }
 
     @GetMapping("/members")
-    public String list(Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request,model)) {
-            return "redirect:/logins/loginForm";
-        }
+    public String list(Model model) {
 
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);

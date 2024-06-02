@@ -2,7 +2,6 @@ package YH.YHistory.board;
 
 import YH.YHistory.category.Category;
 import YH.YHistory.category.CategoryService;
-import YH.YHistory.util.LoginSessionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +23,7 @@ public class BoardController {
 
     @GetMapping("/boards/new")
     public String createForm(Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         model.addAttribute("boardForm", new BoardForm());
         model.addAttribute("categories", categoryService.findCategories());
         return "boards/createBoardForm";
@@ -34,8 +31,10 @@ public class BoardController {
 
     @PostMapping("/boards/new")
     public String create(@Validated BoardForm boardForm,
-                         BindingResult result) {
+                         BindingResult result,
+                         Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.findCategories());
             return "boards/createBoardForm";
         }
         boardService.create(boardForm);
@@ -44,9 +43,7 @@ public class BoardController {
 
     @GetMapping("/boards")
     public String list(Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         List<Board> boards = boardService.findAll();
         model.addAttribute("categories", categoryService.findCategories());
         model.addAttribute("boards", boards);
@@ -68,9 +65,7 @@ public class BoardController {
 
     @GetMapping("boards/{boardId}/view")
     public String viewBoard(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         Board board = boardService.findOne(boardId);
         board.alterLineSpace();
         model.addAttribute("board", board);
@@ -79,9 +74,7 @@ public class BoardController {
 
     @GetMapping("boards/{boardId}/edit")
     public String updateBoardForm(@PathVariable("boardId") Long boardId, Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         Board board = boardService.findOne(boardId);
         BoardForm boardForm = new BoardForm();
         boardForm.setTitle(board.getTitle());
@@ -93,7 +86,14 @@ public class BoardController {
     }
 
     @PostMapping("boards/{boardId}/edit")
-    public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardForm") BoardForm boardForm) {
+    public String updateBoard(@PathVariable("boardId") Long boardId,
+                              @Validated @ModelAttribute("boardForm") BoardForm boardForm,
+                              BindingResult result,
+                              Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.findCategories());
+            return "boards/updateBoardForm";
+        }
         boardService.update(boardId, boardForm);
 
         return "redirect:/boards";

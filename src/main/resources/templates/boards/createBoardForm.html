@@ -26,11 +26,13 @@
                 th:field="*{categoryId}"
                 th:text="${category.categoryName}" />
       </select>
+      <div class="field-error" th:errors="*{categoryId}">카테고리 오류</div>
     </div>
 
     <div class="form-group">
       <label th:for="title">제목</label>
       <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요">
+      <div class="field-error" th:errors="*{title}">제목 오류</div>
     </div>
     <div class="form-group">
       <label th:for="contents">내용</label>

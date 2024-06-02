@@ -1,6 +1,5 @@
 package YH.YHistory.category;
 
-import YH.YHistory.util.LoginSessionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +19,15 @@ public class CategoryController {
 
     @GetMapping("/categories/new")
     public String createForm(Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         model.addAttribute("categoryForm", new CategoryForm());
         return "categories/createCategoryForm";
     }
 
     @PostMapping("/categories/new")
-    public String create(@Validated CategoryForm categoryForm, BindingResult result) {
+    public String create(@Validated CategoryForm categoryForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categoryForm", new CategoryForm());
             return "categories/createCategoryForm";
         }
 
@@ -40,9 +38,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String list(Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         List<Category> categoryList = categoryService.findCategories();
         model.addAttribute("categories", categoryList);
         return "categories/categoryList";
@@ -50,9 +46,7 @@ public class CategoryController {
 
     @GetMapping("categories/{categoryId}/edit")
     public String updateCategoryForm(@PathVariable("categoryId") Long categoryId, Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         Category category = categoryService.findOne(categoryId);
         CategoryForm categoryForm = new CategoryForm();
         categoryForm.setCategory(category.getCategoryName());
@@ -61,16 +55,21 @@ public class CategoryController {
     }
 
     @PostMapping("categories/{categoryId}/edit")
-    public String updateCategory(@PathVariable("categoryId") Long categoryId, @ModelAttribute("categoryForm") CategoryForm categoryForm) {
+    public String updateCategory(@PathVariable("categoryId") Long categoryId,
+                                 @Validated @ModelAttribute("categoryForm") CategoryForm categoryForm,
+                                 BindingResult result,
+                                 Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("categoryForm", new CategoryForm());
+            return "categories/updateCategoryForm";
+        }
         categoryService.updateCategory(categoryId, categoryForm.getCategory());
         return ("redirect:/categories");
     }
 
     @GetMapping("categories/{categoryId}/delete")
     public String deleteCategory(@PathVariable("categoryId") Long categoryId, Model model, HttpServletRequest request) {
-        if (!LoginSessionUtil.isLoginThenAddMemberAtModel(request, model)) {
-            return "redirect:/logins/loginForm";
-        }
+
         categoryService.deleteById(categoryId);
         return ("redirect:/categories");
     }
